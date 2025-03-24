@@ -57,22 +57,20 @@ void displayMainScreen() {
     M5.Display.setCursor(0, 40);
     M5.Display.printf("  Temp: %2.1f  \r\n  Humi: %2.0f%%  \r\n  Pressure:%2.0f hPa\r\n", temp, hum, pressure / 100);
 
-    if (LCD_SHOW_DEBUG_INFO == "1") {
-        M5.Display.setCursor(0, 92);
-        bool wifi_connected = (WiFi.status() == WL_CONNECTED);
-        displayStatus("WiFi", wifi_connected, wifi_connected ? "Connected" : "Disconnected");
-        
-        M5.Display.setCursor(0, 110);
-        char otel_status[32];
-        if (!wifi_connected) {
-            snprintf(otel_status, sizeof(otel_status), "No WiFi");
-        } else if (upload_fail_count > 0) {
-            snprintf(otel_status, sizeof(otel_status), "Failed (%d)", upload_fail_count);
-        } else {
-            snprintf(otel_status, sizeof(otel_status), "OK");
-        }
-        displayStatus("OTEL", upload_fail_count == 0 && wifi_connected, otel_status);
+    M5.Display.setCursor(0, 92);
+    bool wifi_connected = (WiFi.status() == WL_CONNECTED);
+    displayStatus("WiFi", wifi_connected, wifi_connected ? "Connected" : "Disconnected");
+    
+    M5.Display.setCursor(0, 110);
+    char otel_status[32];
+    if (!wifi_connected) {
+        snprintf(otel_status, sizeof(otel_status), "No WiFi");
+    } else if (upload_fail_count > 0) {
+        snprintf(otel_status, sizeof(otel_status), "Failed (%d)", upload_fail_count);
+    } else {
+        snprintf(otel_status, sizeof(otel_status), "OK");
     }
+    displayStatus("OTL", upload_fail_count == 0 && wifi_connected, otel_status);
 }
 
 // Function to display network details

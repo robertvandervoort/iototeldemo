@@ -5,8 +5,8 @@
 #define LCD_SHOW_DEBUG_INFO "1"
 
 // Set your local WiFi username and password. Please use a 2.4GHz access point for the M5 Stick
-#define WIFI_SSID     "Morningwood"
-#define WIFI_PASSWORD "1stBorn5on"
+#define WIFI_SSID     "your ssid goes here"
+#define WIFI_PASSWORD "your wifi password goes here"
 
 // Set the device hostname for network identification
 #define WIFI_HOSTNAME "M5StickC-OTEL"

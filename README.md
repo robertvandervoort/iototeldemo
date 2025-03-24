@@ -4,16 +4,18 @@ This project demonstrates sending IoT sensor data to OpenTelemetry using an M5St
 
 ## Hardware Requirements
 
-- M5Stack Core2 or M5Stack Fire
-- ENV III Sensor Unit
+- M5StickC-Plus ```https://docs.m5stack.com/en/core/m5stickc_plus```
+- ENV III Sensor Unit ```https://docs.m5stack.com/en/unit/envIII```
 - USB-C cable for programming/power
+
 
 ## Software Requirements
 
-- PlatformIO IDE
-- Arduino framework
-- M5Unified library
-- M5Unit-ENV library
+-  Visual Studio Code or Cursor with:
+  - PlatformIO IDE
+  - Espressif 32 platform installed in PlatformIO
+  - M5Unified library
+  - M5Unit-ENV library
 
 ## Configuration
 
@@ -27,13 +29,13 @@ Copy `config.h.example` to `config.h` and update with your settings:
 
 // OpenTelemetry Configuration
 #define OTEL_HOST "your.otel.host"  // Hostname/IP of your OpenTelemetry collector
-#define OTEL_PORT "4318"            // Port for OTLP/HTTP
+#define OTEL_PORT "4318"            // Port for OTLP/HTTP ensure this stays in quotes
 #define OTEL_PATH "/v1/metrics"     // Path for metrics endpoint
 #define OTEL_SERVICE_NAME "m5stack-env"
 #define OTEL_SERVICE_VERSION "1.0.0"
 
 // Debug Configuration
-#define LCD_SHOW_DEBUG_INFO "1"     // Show debug info on LCD (1=yes, 0=no)
+#define LCD_SHOW_DEBUG_INFO "1"     // Show debug info in serial terminal output (1=yes, 0=no)
 ```
 
 ## OpenTelemetry Health Check Requirements
@@ -43,7 +45,7 @@ This project uses the OpenTelemetry Collector's health check extension to monito
 ### For Splunk OpenTelemetry Collector:
 1. The health check extension is included by default
 2. You must configure it to listen on an external IP (not just localhost)
-3. Add the following to your collector's configuration:
+3. Add the following to your OTel collector's configuration:
 
 ```yaml
 extensions:
