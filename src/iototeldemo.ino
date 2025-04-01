@@ -1250,7 +1250,7 @@ void setup() {
     M5.Display.setTextSize(2);  // Changed from 1 to 2 for larger text
     M5.Display.setTextColor(WHITE);
     M5.Display.setCursor(0, 0);
-    M5.Display.println("IoT OpenTelemetry Demo");
+    M5.Display.println("IoT OTel Demo");
     
     // Configure power management for best battery life
     debugLog("Configuring power management for optimal battery life");
@@ -1778,6 +1778,7 @@ void loop() {
         all_metrics_added &= otel.addMetric("battery_voltage", g_battery_voltage/1000, sensor_reading_timestamp); // convert to volts
         all_metrics_added &= otel.addMetric("battery_charging", g_is_charging ? 1 : 0, sensor_reading_timestamp);
         all_metrics_added &= otel.addMetric("wifi.rssi", WiFi.RSSI(), sensor_reading_timestamp);
+        all_metrics_added &= otel.addMetric("FreeHeap", ESP.getFreeHeap(), sensor_reading_timestamp); // added for testing
 
         if (!all_metrics_added) {
             debugLog("Warning: Some metrics weren't added due to buffer constraints");
