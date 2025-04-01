@@ -319,12 +319,7 @@ If you're using Splunk Observability Cloud, a complete OpenTelemetry agent confi
 
 ### Other Cloud Platforms
 
-For production use, configure your device to connect to any of these OpenTelemetry-compatible platforms:
-
-- Grafana Cloud
-- New Relic
-- Datadog
-- Dynatrace
+Other OTel collectors will need to be configured similarly to enable the OTLPHttp receiver in metrics and in traces as we use OTLP HTTP calls to send our metrics and traces. Follow the guide for your platform.
 
 ### Sample Dashboards
 
@@ -337,7 +332,7 @@ In your visualization tool, you can create dashboards showing:
 
 ## Example Debug Output
 
-When your device is running with debug enabled, you'll see output like this:
+When your device is running with debug enabled, you'll see output like this in the monitoring terminal window:
 
 ```
 [2025-04-01 02:24:18.000] [DEBUG] Time to send metrics to OpenTelemetry (interval: 30000 ms, last send: 30035 ms ago)...
