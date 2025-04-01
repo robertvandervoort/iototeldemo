@@ -198,6 +198,22 @@ Each metric includes:
 
 Metrics are sent at regular intervals configured by `OTEL_SEND_INTERVAL` (default: 30 seconds).
 
+## Examples in Splunk Observability Cloud
+
+### Distributed Tracing
+
+This screenshot shows the distributed traces captured in Splunk APM. Each trace represents a complete operation cycle, with spans for sensor reading, data processing, and metric transmission. This provides deep visibility into the device's internal operations and helps identify performance bottlenecks.
+
+![Distributed Traces in Splunk APM](Screenshot%202025-03-31%20214506.png)
+
+### Metrics Dashboard
+
+The following screenshot shows the M5StickC sensor data visualized in a Splunk Observability Cloud dashboard. The dashboard displays temperature, humidity, pressure, and battery metrics over time, allowing for easy monitoring of environmental conditions and device status.
+
+![Metrics Dashboard in Splunk Observability Cloud](Screenshot%202025-03-31%20214539.png)
+
+A complete dashboard JSON export (`dashboard_RV - IoT Dashboard Level 1.json`) is included in this project. You can import this file directly into your Splunk Observability Cloud instance to quickly set up a similar dashboard for monitoring your own devices.
+
 ## Troubleshooting
 
 1. Check serial output for detailed debug information
