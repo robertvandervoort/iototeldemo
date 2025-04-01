@@ -313,11 +313,14 @@ Start the collector with Docker:
 docker run -v $(pwd)/otel-collector-config.yaml:/etc/otel-collector-config.yaml -p 4318:4318 -p 8889:8889 otel/opentelemetry-collector:latest --config=/etc/otel-collector-config.yaml
 ```
 
-### Cloud Platforms
+### Splunk Observability Cloud
+
+If you're using Splunk Observability Cloud, a complete OpenTelemetry agent configuration example is available in this codebase at `iototeldemo\agent-config.yaml.splunk.yml`. This file includes all necessary settings for running the collector with this device, including the required health check extension.
+
+### Other Cloud Platforms
 
 For production use, configure your device to connect to any of these OpenTelemetry-compatible platforms:
 
-- Splunk Observability Cloud
 - Grafana Cloud
 - New Relic
 - Datadog

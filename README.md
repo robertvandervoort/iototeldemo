@@ -73,15 +73,60 @@ This project uses the OpenTelemetry Collector's health check extension to monito
 3. Add the following to your OTel collector's configuration:
 
 ```yaml
+# Health check extension used by the M5Stick to verify collector availability
 extensions:
   health_check:
-    endpoint: 0.0.0.0:13133  # Listen on all interfaces
-    path: /   # Health check endpoint path
+    endpoint: "0.0.0.0:13133"
 
+# OTLP receiver configuration - the M5Stick connects to port 4318 via HTTP
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "${SPLUNK_LISTEN_INTERFACE}:4317"
+      http:
+        endpoint: "${SPLUNK_LISTEN_INTERFACE}:4318"
+
+# Core processors used in the metrics and traces pipelines
+processors:
+  batch:
+    metadata_keys:
+      - X-SF-Token
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: ${SPLUNK_MEMORY_LIMIT_MIB}
+  resourcedetection:
+    detectors: [gcp, ecs, ec2, azure, system]
+    override: true
+  resource/add_environment:
+    attributes:
+      - action: insert
+        value: rv-lab
+        key: deployment.environment
+
+# Service definition showing which components are used in each pipeline
 service:
   extensions: [health_check]
-  # ... rest of your service configuration ...
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors:
+      - memory_limiter
+      - batch
+      - resourcedetection
+      - resource/add_environment
+      exporters: [otlphttp, signalfx]
+    metrics:
+      receivers: [otlp]
+      processors:
+      - memory_limiter
+      - batch
+      - resourcedetection
+      - resource/add_environment
+      exporters: [signalfx]
 ```
+
+A complete Splunk Observability Cloud OpenTelemetry agent configuration example is available in this codebase at `iototeldemo\agent-config.yaml.splunk.yml`. This file includes all necessary settings for running the collector with the M5Stick device.
 
 ### For Other OpenTelemetry Collectors:
 1. Enable the health check extension in your collector configuration
