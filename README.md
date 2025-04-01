@@ -38,6 +38,31 @@ Copy `config.h.example` to `config.h` and update with your settings:
 #define LCD_SHOW_DEBUG_INFO "1"     // Show debug info in serial terminal output (1=yes, 0=no)
 ```
 
+## NTP Configuration
+
+The device uses NTP (Network Time Protocol) to synchronize its RTC (Real Time Clock) to ensure accurate timestamps for sensor data. Configure NTP settings in `config.h`:
+
+```cpp
+// NTP Configuration
+#define NTP_SERVER1         "pool.ntp.org"      // Primary NTP server
+#define NTP_SERVER2         "time.google.com"   // Secondary NTP server (or empty string if not used)
+#define NTP_SERVER3         "time.windows.com"  // Tertiary NTP server (or empty string if not used)
+// NTP timeout settings
+#define NTP_SYNC_TIMEOUT    10000   // Timeout for NTP sync in milliseconds (10 seconds)
+#define NTP_MAX_RETRIES     3       // Maximum number of NTP sync retries before giving up
+```
+
+For isolated networks without internet access, configure these with local NTP server addresses. All timestamps are in UTC.
+
+### Timestamp Precision
+
+When sending data to OpenTelemetry, the device:
+1. Captures timestamps at the exact moment sensor data is collected (not when data is sent)
+2. Uses the hardware RTC when available for improved precision
+3. Sends timestamps in nanoseconds since epoch (UTC) as required by OpenTelemetry
+
+This ensures accurate time alignment of sensor data even in environments with intermittent connectivity.
+
 ## OpenTelemetry Health Check Requirements
 
 This project uses the OpenTelemetry Collector's health check extension to monitor collector availability. The health check endpoint must be properly configured:
@@ -113,13 +138,20 @@ The device will:
 
 The following metrics are sent to OpenTelemetry:
 
-- Temperature (°C)
-- Humidity (%)
-- Pressure (hPa)
-- Battery level (%)
-- Battery voltage (V)
-- Charging status (0/1)
-- WiFi signal strength (dBm)
+- `temperature`: Temperature reading in degrees Celsius (°C)
+- `humidity`: Relative humidity percentage (%)
+- `pressure`: Atmospheric pressure in hectopascals (hPa)
+- `battery_level`: Current battery charge level (%)
+- `battery_voltage`: Battery voltage in volts (V)
+- `battery_charging`: Binary indicator if device is charging (1) or not (0)
+- `wifi.rssi`: WiFi signal strength in decibel-milliwatts (dBm), typically ranges from -30 (excellent) to -90 (poor)
+
+Each metric includes:
+- Precise timestamp of when the sensor reading was taken
+- Service name and version as resource attributes
+- WiFi SSID as a resource attribute
+
+Metrics are sent at regular intervals configured by `OTEL_SEND_INTERVAL` (default: 30 seconds).
 
 ## Troubleshooting
 
